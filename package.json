@@ -1,0 +1,20 @@
+{
+  "name": "anon-wb",
+  "version": "1.0.0",
+  "description": "A project to share sensitive files anonymously.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\\"
+  },
+  "author": "Shreehari R Acharya",
+  "license": "ISC",
+  "dependencies": {
+    "diamnet-sdk": "^1.0.0",
+    "express": "^4.19.2"
+  }
+}
