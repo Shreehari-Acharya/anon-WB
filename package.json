@@ -5,11 +5,11 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "node server.js"
+    "start": "node server.cjs"
   },
   "repository": {
     "type": "git",
-    "url": "\\"
+    "url": ""
   },
   "author": "Shreehari R Acharya",
   "license": "ISC",

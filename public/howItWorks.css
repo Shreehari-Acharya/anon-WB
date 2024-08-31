@@ -1,0 +1,113 @@
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #000000; /* Black background */
+    margin: 0;
+    padding: 0;
+    color: #ffffff; /* White text */
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    background: #222222; /* Dark gray background for containers */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+header {
+    background: #000000;
+    color: #ffffff;
+    padding: 20px 0;
+    min-height: 70px;
+    border-bottom: 5px solid #007bff; /* Blue border */
+    border-radius: 0 0 10px 10px;
+}
+
+header h1 {
+    text-align: center;
+    margin: 0;
+    font-size: 36px;
+    letter-spacing: 1px;
+}
+
+section {
+    padding: 20px;
+    margin: 20px 0;
+    background: #222222; /* Dark gray background for sections */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    color: #007bff; /* Blue text for headers */
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    padding: 15px 0;
+    border-bottom: 1px solid #444444; /* Darker gray border */
+    color: #ffffff;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+footer {
+    background: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 20px;
+    border-top: 5px solid #007bff; /* Blue border */
+    border-radius: 10px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Typing animation styles */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    0%, 50% {
+        border-right-color: #007bff; /* Blue cursor */
+    }
+    50.1%, 100% {
+        border-right-color: transparent;
+    }
+}
+
+.typing-container {
+    display: inline-block;
+    overflow: hidden; /* Hides text overflow */
+    white-space: nowrap; /* Prevents wrapping */
+    border-right: 2px solid #007bff; /* Blue border */
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    color: #ffffff; /* White text */
+    width: 0; /* Initially hide the text */
+    animation: typing 8s steps(40, end) infinite, blink 0.75s step-end infinite;
+}
+
+.typing-text {
+    display: inline;
+    white-space: nowrap;
+}
