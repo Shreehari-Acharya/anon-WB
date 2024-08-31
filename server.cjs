@@ -13,20 +13,21 @@ const pinata = new PinataSDK({
 
 const pair = DiamSdk.Keypair.random();
 
-(async function loadAccountWithFriendbot() {
-  try {
-    const response = await fetch(
-      `https://friendbot.diamcircle.io?addr=${encodeURIComponent(
-        pair.publicKey()
-      )}`
-    );
-    const responseJSON = await response.json();
-    console.log("SUCCESS! You have a new account :)\n", responseJSON);
-  } catch (e) {
-    console.error("ERROR!", e);
-  }
+// (async function loadAccountWithFriendbot() {
+//   try {
+//     const response = await fetch(
+//       `https://friendbot.diamcircle.io?addr=${encodeURIComponent(
+//         pair.publicKey()
+//       )}`
+//     );
+//     const responseJSON = await response.json();
+//     console.log("SUCCESS! You have a new account :)\n", responseJSON);
+//   } catch (e) {
+//     console.error("ERROR!", e);
+//   }
+// })();
 
-})();
+
 // Initialize Express and SQLite
 const app = express();
 const port = 3000;
@@ -142,8 +143,7 @@ app.post('/download', async (req, res) => {
       return res.status(400).json({ error: 'Public Key is required' });
     }
     checkForAssetsInDatabase(publicKey);
-
-
+    
     
 
   } catch (error) {
