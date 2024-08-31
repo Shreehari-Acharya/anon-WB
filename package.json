@@ -16,6 +16,7 @@
   "dependencies": {
     "diamnet-sdk": "^1.0.0",
     "express": "^4.19.2",
-    "pinata": "^0.4.0"
+    "pinata": "^0.4.0",
+    "sqlite3": "^5.1.7"
   }
 }
