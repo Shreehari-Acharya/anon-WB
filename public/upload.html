@@ -10,8 +10,9 @@
     <div class="upload-container">
         <h1 id="heading">Upload Your File</h1>
         <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm1">
-            <input type="file" name="fileToUpload" id="fileToUpload" required>
+            <input type="file" name="file" id="fileToUpload" required>
             <br>
+            <input type="text" name="publicKey" id="publicKey" placeholder="Enter Public Key of the recipient" required>
             <button type="submit">Upload File</button>
         </form>
         

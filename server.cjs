@@ -12,15 +12,15 @@ const pinata = new PinataSDK({
   pinataGateway: process.env.PINATA_GATEWAY,
 });
 
-const ANON_KEY = DiamSdk.Keypair.random();
-console.log("ANON_KEY:", ANON_KEY.publicKey());
-console.log("ANON_KEY SECRET:", ANON_KEY.secret());
+// const ANON_KEY = DiamSdk.Keypair.random();
+// console.log("ANON_KEY:", ANON_KEY.publicKey());
+// console.log("ANON_KEY SECRET:", ANON_KEY.secret());
 
 // (async function loadAccountWithFriendbot() {
 //   try {
 //     const response = await fetch(
 //       `https://friendbot.diamcircle.io?addr=${encodeURIComponent(
-//         pair.publicKey()
+//         ANON_KEY.publicKey()
 //       )}`
 //     );
 //     const responseJSON = await response.json();
@@ -78,19 +78,12 @@ async function getFileFromIPFS(hash) {
 async function checkForAssetsInDatabase(publicKey) {
   db.get(`SELECT ipfs_hash FROM reports WHERE recipient_public_key = ?`, publicKey, function (err, row) {
     if (err || !row) {
-      console.error("Error fetching data from database:", err?.message);
-      return res.status(500).json({ error: 'Database fetch failed' });
+      return null;
     }
 
     const ipfsHash = row.ipfs_hash;
-    getFileFromIPFS(ipfsHash).then(data => {
-      res.type('application/octet-stream');
-      res.send(data);
-    }).catch(error => {
-      console.error("Error retrieving file from IPFS:", error.message);
-      res.status(500).json({ error: 'File download failed' });
-    });
-  });
+    return ipfsHash;
+  });  
 }
 
 // Route to handle file uploads and store in database
@@ -110,7 +103,8 @@ app.post('/upload', async (req, res) => {
         console.error("Error inserting data into database:", err.message);
         return res.status(500).json({ error: 'Database insert failed' });
       }
-      res.json({ cid: cid });
+
+      res.status(200).json({ message: 'File uploaded successfully' });
     });
 
     
@@ -130,16 +124,19 @@ app.post('/download', async (req, res) => {
     if (!publicKey) {
       return res.status(400).json({ error: 'Public Key is required' });
     }
-    checkForAssetsInDatabase(publicKey);
+    const ipfs_hash = await checkForAssetsInDatabase(publicKey);
 
-
-    
-
+    if(ipfs_hash){
+      const data = await getFileFromIPFS(ipfs_hash);
+        res.type('application/octet-stream');
+        res.send(data);
+    }
 
   } catch (error) {
     console.error("Error in /download route:", error.message);
     res.status(500).json({ error: 'File download failed' });
   }
+      
 });
 
 
