@@ -86,3 +86,5 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     console.error('File and Public Key are required.');
   }
 });
+
+

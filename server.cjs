@@ -3,15 +3,18 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const { PinataSDK } = require("pinata");
+require('dotenv').config();
 
 const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
 const pinata = new PinataSDK({
-  pinataJwt: "PINATA_JWT",
-  pinataGateway: "example-gateway.mypinata.cloud",
+  pinataJwt: process.env.PINATA_APIKEY,
+  pinataGateway: process.env.PINATA_GATEWAY,
 });
 
-const pair = DiamSdk.Keypair.random();
+const ANON_KEY = DiamSdk.Keypair.random();
+console.log("ANON_KEY:", ANON_KEY.publicKey());
+console.log("ANON_KEY SECRET:", ANON_KEY.secret());
 
 // (async function loadAccountWithFriendbot() {
 //   try {
@@ -110,23 +113,8 @@ app.post('/upload', async (req, res) => {
       res.json({ cid: cid });
     });
 
-    const transaction = new DiamSdk.TransactionBuilder(issuerAccount, {
-      fee: DiamSdk.BASE_FEE,
-      networkPassphrase: DiamSdk.Networks.TESTNET,
-    })
-      .addOperation(
-        DiamSdk.Operation.payment({
-          destination: publicKey, // Public key of the recipient
-          asset: ticketAsset,
-          amount: "1", // Amount of the asset to send
-        })
-      )
-      .addMemo(DiamSdk.Memo.text("CID: YOUR_CID_VALUE"))
-      .setTimeout(180)
-      .build();
     
-    // Sign the transaction with the issuer's secret key
-    transaction.sign(issuerKeypair);
+    
 
   } catch (error) {
     console.error("Error in /upload route:", error.message);
@@ -143,8 +131,10 @@ app.post('/download', async (req, res) => {
       return res.status(400).json({ error: 'Public Key is required' });
     }
     checkForAssetsInDatabase(publicKey);
+
+
     
-    
+
 
   } catch (error) {
     console.error("Error in /download route:", error.message);
