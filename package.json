@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.cjs"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
     "diamnet-sdk": "^1.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "pinata": "^0.4.0",
+    "ipfs-http-client": "^60.0.1",
+    "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.7"
   }
 }

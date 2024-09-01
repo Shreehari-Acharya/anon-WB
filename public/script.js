@@ -1,12 +1,7 @@
-function connectToWallet(){
-  window.diam
-  .connect()
-  .then((result) => result.message[0])
-  .catch((error) => console.error(`Error: ${error}`));
-  
+let USERKEY; // Declare USERKEY with `let` to allow reassignment
 
 
-}
+
 
 async function downloadAsset(publicKey) {
   try {
@@ -31,7 +26,7 @@ async function downloadAsset(publicKey) {
     const downloadUrl = window.URL.createObjectURL(fileBlob);
     const a = document.createElement('a');
     a.href = downloadUrl;
-    a.download = 'downloaded_file'; // You can set the desired filename here
+    a.download = 'file'; // You can set the desired filename here
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -46,3 +41,13 @@ async function downloadAsset(publicKey) {
 }
 
 
+
+function connectToWallet() {
+  window.diam
+    .connect()
+    .then((result) => {
+      USERKEY = result.message[0]; // Assign the result to USERKEY
+      downloadAsset(USERKEY);
+    })
+    .catch((error) => console.error(`Error: ${error.message}`));
+}
