@@ -1,4 +1,4 @@
-let USERKEY; // Declare USERKEY with `let` to allow reassignment
+let USERKEY; // Declare USERKEY 
 
 
 
@@ -14,13 +14,17 @@ async function downloadAsset(publicKey) {
       body: JSON.stringify({ publicKey: publicKey }), // Passing the publicKey in the request body
     });
 
+    const messageDiv = document.querySelector('.downloadinfo');
+
     // Checking if the request was successful
     if (!response.ok) {
+      messageDiv.innerText = "You dont have any files to download";
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
 
     // Retrieving the file data from the response
     const fileBlob = await response.blob();
+    
 
     // Creating a download link for the file
     const downloadUrl = window.URL.createObjectURL(fileBlob);
@@ -42,12 +46,15 @@ async function downloadAsset(publicKey) {
 
 
 
-function connectToWallet() {
-  window.diam
-    .connect()
-    .then((result) => {
-      USERKEY = result.message[0]; // Assign the result to USERKEY
-      downloadAsset(USERKEY);
-    })
-    .catch((error) => console.error(`Error: ${error.message}`));
+
+async function connectToWallet() {
+  try {
+    const connectionDiv = document.body.querySelector('.container');
+    connectionDiv.remove();  
+    const result = await window.diam.connect();
+    USERKEY = result.message[0]; // Assign the result to USERKEY
+    await downloadAsset(USERKEY);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
 }

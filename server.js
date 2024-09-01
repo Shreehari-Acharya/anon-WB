@@ -1,34 +1,18 @@
-import DiamSdk from "diamnet-sdk";
+//import * as DiamSdk from "diamnet-sdk";
 import express from 'express';
 import multer from 'multer';
 import sqlite3 from 'sqlite3';
 import bodyParser from 'body-parser';
 import { create } from 'ipfs-http-client';
 
+// The main idea was not to create a database but create a small asset on diamante Network
+// and send the ipfs hash as content of the asset to the recipients public key. Hence the user could check his wallet 
+// to know that he has been sent a file. The user could later on download it from the ipfs.
+// Unfortunately due to testnet being inconsistent it was hard to do this and we used a database.
+// and just using Diamante wallet to get the public key for comfirming the end user.
 
-const server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io/");
 
 const ipfs = create()
-
-
-// const ANON_KEY = DiamSdk.Keypair.random();
-// console.log("ANON_KEY:", ANON_KEY.publicKey());
-// console.log("ANON_KEY SECRET:", ANON_KEY.secret());
-
-// (async function loadAccountWithFriendbot() {
-//   try {
-//     const response = await fetch(
-//       `https://friendbot.diamcircle.io?addr=${encodeURIComponent(
-//         ANON_KEY.publicKey()
-//       )}`
-//     );
-//     const responseJSON = await response.json();
-//     console.log("SUCCESS! You have a new account :)\n", responseJSON);
-//   } catch (e) {
-//     console.error("ERROR!", e);
-//   }
-// })();
-
 
 // Initialize Express and SQLite
 const app = express();
@@ -65,7 +49,7 @@ async function uploadFileToIPFS(file) {
   }
 }
 
-// Function to retrieve file from IPFS (for example purpose)
+// Function to retrieve file from IPFS
 async function getFileFromIPFS(hash) {
   try {
     const stream = ipfs.cat(hash);
@@ -108,17 +92,53 @@ async function checkForAssetsInDatabase(publicKey) {
 
     const cid = await uploadFileToIPFS(file);
 
+    // This is the part where we would add cid in manageData and user could see it in wallet
+
+    // var server = new DiamSdk.Aurora.Server("https://diamtestnet.diamcircle.io");
+    // var sourceKeys = DiamSdk.Keypair.fromSecret(
+    //   "SECRET_KEY_OF_OUR_WALLET"
+    // );
+
+    // var transaction;
+
+    // server
+    //   .loadAccount(sourceKeys.publicKey())
+    //   .then(function (sourceAccount) {
+    //     // Start building the transaction.
+    //     transaction = new DiamSdk.TransactionBuilder(sourceAccount, {
+    //       fee: DiamSdk.BASE_FEE,
+    //       networkPassphrase: "Diamante Testnet",
+    //     })
+    //       .addOperation(
+    //         DiamSdk.Operation.manageData({
+    //           name: "ANON", // The name of the data entry
+    //           source: 'PUBLIC_KEY_OF_THE_RECIPIENT',
+    //           value: "IPFS/CID_VALUE", // The value to store
+    //         })
+    //       )
+    //       .setTimeout(0)
+    //       .build();
+    //     // Sign the transaction to prove you are actually the person sending it.
+    //     transaction.sign(sourceKeys);
+    //     // And finally, send it off to Diamante!
+    //     return server.submitTransaction(transaction);
+    //   })
+    //   .then(function (result) {
+    //     console.log("Success! Results:", result);
+    //   })
+    //   .catch(function (error) {
+    //     console.error("Something went wrong!", error);
+    //   });
+
+
     db.run(`INSERT INTO reports (ipfs_hash, recipient_public_key) VALUES (?, ?)`, [cid, publicKey], function (err) {
       if (err) {
         console.error("Error inserting data into database:", err.message);
         return res.status(500).json({ error: 'Database insert failed' });
       }
 
-      res.status(200).json({ message: 'File uploaded successfully' });
+      res.status(200).send( "<h1>Success!</h1>");
     });
-
-    
-    
 
   } catch (error) {
     console.error("Error in /upload route:", error.message);
@@ -153,10 +173,9 @@ app.post('/download', async (req, res) => {
       
 });
 
-
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`ANON-WB is running on port: ${port}`);
 });
 
 
